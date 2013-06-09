@@ -1,0 +1,4 @@
+
+
+#PS1="\n\u:\w \[$BBLACK\]\$(vcprompt)\[$NO_COLOR\] \n→ "
+PS1="\n\u:\w \$(vcprompt)\[$NO_COLOR\] \n→ "

@@ -1,0 +1,12 @@
+export GIT_EDITOR="vim -w"
+export EDITOR="vim"
+export DERBY_HOME=~/glassfish3/javadb
+export GLASSFISH_HOME=~/glassfish3
+export PATH=~/bin:$GLASSFISH_HOME/bin:$GLASSFISH_HOME/glassfish/bin:$DERBY_HOME/bin:$PATH
+export NODE_PATH="/usr/local/lib/node_modules"
+export OVERTURE_MAVEN_OPTIONS=-Dplatform.classifier=overture
+export MAVEN_OPTS="-Xmx512m"
+export HISTSIZE=1000
+export HISFILESIZE=1000
+export OVERTURE_VERSION=1-1-0 
+
