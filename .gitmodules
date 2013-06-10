@@ -31,3 +31,6 @@
 [submodule "vim/bundle/UltiSnips"]
 	path = vim/bundle/UltiSnips
 	url = https://github.com/KyleBrandon/ultisnips.git
+[submodule "oh-my-zsh"]
+	path = oh-my-zsh
+	url = https://github.com/KyleBrandon/oh-my-zsh.git

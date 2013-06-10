@@ -1,4 +1,4 @@
-export GIT_EDITOR="vim -w"
+export GIT_EDITOR="vim"
 export EDITOR="vim"
 export DERBY_HOME=~/glassfish3/javadb
 export GLASSFISH_HOME=~/glassfish3
