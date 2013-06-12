@@ -14,9 +14,9 @@ setopt AUTO_PUSHD
 bindkey "^N" insert-last-word
 
 # Show contents of directory after cd-ing into it
-chpwd() {
-  ls -lrthG
-}
+# chpwd() {
+#   ls -lrthG
+# }
 
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
@@ -43,7 +43,7 @@ stty stop undef
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-# plugins=(git rvm)
+plugins=(git mercurial history-substring-search zsh-vim-mode)
 
 source $ZSH/oh-my-zsh.sh
 
