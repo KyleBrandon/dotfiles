@@ -60,9 +60,8 @@ map <Leader>e :e %%
 map <Leader>es :sp %%
 map <Leader>ev :vsp %%
 
-map <Leader>sv :so ~/.vimrc<CR>
-" map <Leader>ev :e ~/.vimrc<CR>
-" map <Leader>et :e ~/.tmux.conf<CR>
+map <Leader>ve :e ~/.vimrc<CR>
+map <Leader>te :e ~/.tmux.conf<CR>
 
 
 " Splits
@@ -101,6 +100,7 @@ map <Leader>tR :TernRename<cr>
 syntax enable
 set background=dark
 colorscheme solarized
+set colorcolumn=120
 
 " Default settings
 set nocompatible
