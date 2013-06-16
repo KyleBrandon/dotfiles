@@ -7,12 +7,12 @@ call pathogen#helptags()
 filetype plugin indent on
 syntax on
 
+" Forte
 let g:syntastic_java_javac_maven_args="-Dplatform.classifier=overture -Poverture"
 
 " Leader maps
 noremap \ ,
 let mapleader=","
-
 
 " Just say no
 map <Left> <Nop>
@@ -20,16 +20,19 @@ map <Right> <Nop>
 map <Up> <Nop>
 map <Down> <Nop>
 
-" Map tab to indent in visual mode
-vmap <Tab> >gv
-vmap <S-Tab> <gv
-vmap > >gv
-vmap < <gv
+" Internal macros
+runtime macros/matchit.vim        " Load the matchit plugin.
 
-" Map tab to auto complete in insert mode
-" imap <Tab> <C-n>
-" imap <S-Tab> <C-p>
+" Mercurial Blame
+vnoremap <Leader>b :<C-U>!hg blame -fu <C-R>=expand("%:p") <CR> \| sed -n <C-R>=line("'<") <CR>,<C-R>=line("'>") <CR>p <CR>
 
+" Tern
+let g:tern_map_keys=1
+let g:tern_show_argument_hints='on_hold'
+noremap <Leader>td :TernDoc<cr>
+noremap <Leader>tt :TernType<cr>
+noremap <Leader>td :TernDef<cr>
+noremap <Leader>tR :TernRename<cr>
 
 " Command-T remaps
 nnoremap <leader>o :CommandT<CR>
@@ -38,31 +41,63 @@ nnoremap <leader>m :CommandTBuffer<CR>
 let g:CommandTCancelMap = ['<ESC>', '<C-c>']
 let g:CommandTMaxHeight=50
 let g:CommandTMatchWindowAtTop=0
+" Fuzzy finder: ignore stuff that can't be opened, and generated files
+let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**;target/**"
 
 " CTags remaps
 nnoremap <leader>c :!ctags -R --exclude='.hg'<CR>
 noremap <leader>f <C-]>
 noremap <leader>r <C-t>
 
-:nmap <silent> <leader>d <Plug>DashSearch
+" Dash
+:nnoremap <silent> <leader>d <Plug>DashSearch
 
-" Keyboard mappings
-map <Leader>h :nohl<cr>
-nmap <Leader>p "0p
-nmap <Leader>P "0P
-nmap <Leader>y "0y
-nmap <Leader>Y "0Y
+" Map tab to indent in visual mode
+vnoremap <tab> >gv
+vnoremap <s-tab> <gv
+vnoremap > >gv
+vnoremap < <gv
 
+inoremap <tab> <c-r>=InsertTabWrapper()<cr>
+inoremap <s-tab> <c-p>
+
+" Cut-n-Paste
+nnoremap <Leader>p "0p
+nnoremap <Leader>P "0P
+nnoremap <Leader>y "0y
+nnoremap <Leader>Y "0Y
+
+
+inoremap <leader>u <esc>viwUea
+nnoremap <leader>u :call Preserve("normal viwU")<cr>
 " Edit another file in the same directory as the current file
 " uses expression to extract path from current file's path
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
-map <Leader>e :e %%
-map <Leader>es :sp %%
-map <Leader>ev :vsp %%
+noremap <Leader>e :e %%
+noremap <Leader>es :sp %%
+noremap <Leader>ev :vsp %%
 
-map <Leader>ve :e ~/.vimrc<CR>
-map <Leader>te :e ~/.tmux.conf<CR>
+noremap <Leader>ve :e ~/.vimrc<CR>
+noremap <Leader>te :e ~/.tmux.conf<CR>
 
+" Fix search
+nnoremap / /\v
+vnoremap / /\v
+noremap <Leader>h :nohl<cr>
+set showmatch
+set incsearch                     " Highlight matches as you type.
+set hlsearch                      " Highlight matches.
+set ignorecase                    " Case-insensitive searching.
+set smartcase                     " But case-sensitive if expression contains a capital letter.
+
+" Add * and # support to search for current selection
+xnoremap * :<C-u>call <SID>VSetSearch()<CR>/<C-R>=@/<CR><CR>
+xnoremap # :<C-u>call <SID>VSetSearch()<CR>?<C-R>=@/<CR><CR>
+
+" Show invisibles
+set list
+set listchars=tab:▸\ ,eol:¬
+highlight NonText guifg=#4a4a59
 
 " Splits
 set splitbelow
@@ -73,29 +108,14 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
-map <Leader>s :split<CR>            " New horizontal split on current file
-map <Leader>v :vsplit<CR>           " New vertical split on current file
-map <Leader>k :only<CR>                 " Make current split the only one
+noremap <Leader>s :split<CR>            " New horizontal split on current file
+noremap <Leader>v :vsplit<CR>           " New vertical split on current file
+noremap <Leader>k :only<CR>                 " Make current split the only one
 
 " Buffers
-
-map <Leader><Leader> <C-^>          " Switch to previous buffer
-
-
-" Mercurial Blame
-vmap <Leader>b :<C-U>!hg blame -fu <C-R>=expand("%:p") <CR> \| sed -n <C-R>=line("'<") <CR>,<C-R>=line("'>") <CR>p <CR>
+noremap <Leader><Leader> <C-^>          " Switch to previous buffer
 
 
-" Tern
-let g:tern_map_keys=1
-let g:tern_show_argument_hints='on_hold'
-map <Leader>td :TernDoc<cr>
-map <Leader>tt :TernType<cr>
-map <Leader>td :TernDef<cr>
-map <Leader>tR :TernRename<cr>
-
-        
-        
 "Color scheme
 syntax enable
 set background=dark
@@ -108,8 +128,7 @@ set backspace=indent,eol,start      " Intuitive backspacing.
 set history=1000
 set ruler                           " Show cursor position.
 set showcmd                         " Display incomplete commands.
-set autoindent                      " 
-set showmatch
+set autoindent                      "
 set nowrap
 set backupdir=~/.tmp
 set directory=~/.tmp                " Don't clutter my dirs up with swp and tmp files
@@ -120,67 +139,23 @@ set hidden                        " Handle multiple buffers better.
 set wildmenu                      " Enhanced command line completion.
 set wildmode=list:longest         " Complete files like a shell.
 set wildignore+=*.class,.git,.hg,*/target/*
-set ignorecase                    " Case-insensitive searching.
-set smartcase                     " But case-sensitive if expression contains a capital letter.
 set number                        " Show line numbers.
-set incsearch                     " Highlight matches as you type.
-set hlsearch                      " Highlight matches.
 set title                         " Set the terminal's title
 set visualbell                    " No beeping.
 set nobackup                        " Don't make a backup before overwriting a file.
 set nowritebackup                   " And again.
-set listchars=tab:▸\ ,eol:¬
 set cursorline
 
-highlight NonText guifg=#4a4a59
-
-set list
 set tabstop=8
 set shiftwidth=4
 set softtabstop=4
 set expandtab
+set shiftround
 
 " (Hopefully) removes the delay when hitting esc in insert mode
-
 set noesckeys
 set timeout timeoutlen=500 ttimeoutlen=1
 
-runtime macros/matchit.vim        " Load the matchit plugin.
-
-" Fuzzy finder: ignore stuff that can't be opened, and generated files
-let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**"
-
-" Disable Ex mode
-map Q <Nop>
-
-
-" Set tabstop, softtabstop and shiftwidth to the same value
-command! -nargs=* Stab call Stab()
-function! Stab()
-    let l:tabstop = 1 * input('set tabstop = softtabstop = shiftwidth = ')
-    if l:tabstop > 0
-        let &l:sts = l:tabstop
-        let &l:ts = l:tabstop
-        let &l:sw = l:tabstop
-    endif
-    call SummarizeTabs()
-endfunction
-
-function! SummarizeTabs()
-    try
-        echohl ModeMsg
-        echon 'tabstop='.&l:ts
-        echon ' shiftwidth='.&l:sw
-        echon ' softtabstop='.&l:sts
-        if &l:et
-            echon ' expandtab'
-        else
-            echon ' noexpandtab'
-        endif
-    finally
-        echohl None
-    endtry
-endfunction
 
 " Run a command saving the last search and curosr position.
 function! Preserve(command)
@@ -196,10 +171,10 @@ function! Preserve(command)
 endfunction
 
 " Bind _$ to remove whitespace
-nmap _$ :call Preserve("%s/\\s\\+$//e")<CR>
+nnoremap _$ :call Preserve("%s/\\s\\+$//e")<CR>
 
 " Bind _= to re-indent the buffer
-nmap _= :call Preserve("normal gg=G")<CR>
+nnoremap _= :call Preserve("normal gg=G")<CR>
 
 
 " Only do this part when compiled with support for autocommands
@@ -231,9 +206,6 @@ if has("autocmd")
     au BufRead,BufNewFile *.md setlocal textwidth=80
 endif
 
-" Add * and # support to search for current selection
-xnoremap * :<C-u>call <SID>VSetSearch()<CR>/<C-R>=@/<CR><CR>
-xnoremap # :<C-u>call <SID>VSetSearch()<CR>?<C-R>=@/<CR><CR>
 
 function! s:VSetSearch()
     let temp = @s
@@ -241,4 +213,13 @@ function! s:VSetSearch()
     let @/ = '\V' . substitute(escape(@s, '/\'), '\n', '\\n', 'g')
     let @s = temp
 endfunction
+
+function! InsertTabWrapper()
+    let col = col(".") - 1
+    if !col || getline(".")[col - 1] !~ '\k'
+        return "\<tab>"
+    else
+        return "\<c-n>"
+endfunction
+
 
