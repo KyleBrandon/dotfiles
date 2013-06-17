@@ -1,5 +1,3 @@
-export PATH=~/bin:/usr/local/bin:GLASSFISH_HOME/bin:$GLASSFISH_HOME/glassfish/bin:$DERBY_HOME/bin:$PATH
-
 # Default editor
 export GIT_EDITOR="vim"
 export EDITOR="vim"
@@ -22,3 +20,8 @@ export NODE_PATH="/usr/local/lib/node_modules"
 # Forte
 export OVERTURE_MAVEN_OPTIONS=-Dplatform.classifier=overture
 export OVERTURE_VERSION=1-1-0 
+
+export FORGE_HOME=~/bin/forge
+
+# Path
+export PATH=~/bin:/usr/local/bin:$FORGE_HOME/bin:GLASSFISH_HOME/bin:$GLASSFISH_HOME/glassfish/bin:$DERBY_HOME/bin:$PATH

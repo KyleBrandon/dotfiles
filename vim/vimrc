@@ -24,20 +24,20 @@ map <Down> <Nop>
 runtime macros/matchit.vim        " Load the matchit plugin.
 
 " Mercurial Blame
-vnoremap <Leader>b :<C-U>!hg blame -fu <C-R>=expand("%:p") <CR> \| sed -n <C-R>=line("'<") <CR>,<C-R>=line("'>") <CR>p <CR>
+vmap <Leader>b :<C-U>!hg blame -fu <C-R>=expand("%:p") <CR> \| sed -n <C-R>=line("'<") <CR>,<C-R>=line("'>") <CR>p <CR>
 
 " Tern
 let g:tern_map_keys=1
 let g:tern_show_argument_hints='on_hold'
-noremap <Leader>td :TernDoc<cr>
-noremap <Leader>tt :TernType<cr>
-noremap <Leader>td :TernDef<cr>
-noremap <Leader>tR :TernRename<cr>
+nmap <Leader>td :TernDoc<cr>
+nmap <Leader>tt :TernType<cr>
+nmap <Leader>td :TernDef<cr>
+nmap <Leader>tR :TernRename<cr>
 
 " Command-T remaps
-nnoremap <leader>o :CommandT<CR>
-nnoremap <leader>O :CommandTFlush<CR>
-nnoremap <leader>m :CommandTBuffer<CR>
+nmap <leader>o :CommandT<CR>
+nmap <leader>O :CommandTFlush<CR>
+nmap <leader>m :CommandTBuffer<CR>
 let g:CommandTCancelMap = ['<ESC>', '<C-c>']
 let g:CommandTMaxHeight=50
 let g:CommandTMatchWindowAtTop=0
@@ -45,45 +45,45 @@ let g:CommandTMatchWindowAtTop=0
 let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**;target/**"
 
 " CTags remaps
-nnoremap <leader>c :!ctags -R --exclude='.hg'<CR>
-noremap <leader>f <C-]>
-noremap <leader>r <C-t>
+nmap <leader>c :!ctags -R --exclude='.hg'<CR>
+nmap <leader>f <C-]>
+nmap <leader>r <C-t>
 
 " Dash
-:nnoremap <silent> <leader>d <Plug>DashSearch
+:nmap <silent> <leader>d <Plug>DashSearch
 
 " Map tab to indent in visual mode
-vnoremap <tab> >gv
-vnoremap <s-tab> <gv
-vnoremap > >gv
-vnoremap < <gv
+vmap <tab> >gv
+vmap <s-tab> <gv
+vmap > >gv
+vmap < <gv
 
-inoremap <tab> <c-r>=InsertTabWrapper()<cr>
-inoremap <s-tab> <c-p>
+imap <tab> <c-r>=InsertTabWrapper()<cr>
+imap <s-tab> <c-p>
 
 " Cut-n-Paste
-nnoremap <Leader>p "0p
-nnoremap <Leader>P "0P
-nnoremap <Leader>y "0y
-nnoremap <Leader>Y "0Y
+nmap <Leader>p "0p
+nmap <Leader>P "0P
+nmap <Leader>y "0y
+nmap <Leader>Y "0Y
+nmap <leader>v V`]
 
 
-inoremap <leader>u <esc>viwUea
-nnoremap <leader>u :call Preserve("normal viwU")<cr>
 " Edit another file in the same directory as the current file
 " uses expression to extract path from current file's path
-cnoremap %% <C-R>=expand('%:h').'/'<cr>
-noremap <Leader>e :e %%
-noremap <Leader>es :sp %%
-noremap <Leader>ev :vsp %%
+cmap %% <C-R>=expand('%:h').'/'<cr>
+nmap <Leader>e :e %%
+nmap <Leader>es :sp %%
+nmap <Leader>ev :vsp %%
 
-noremap <Leader>ve :e ~/.vimrc<CR>
-noremap <Leader>te :e ~/.tmux.conf<CR>
+nmap <Leader>ve :e ~/.vimrc<CR>
+nmap <Leader>te :e ~/.tmux.conf<CR>
 
 " Fix search
-nnoremap / /\v
-vnoremap / /\v
-noremap <Leader>h :nohl<cr>
+nmap / /\v
+vmap / /\v
+nmap <Leader>h :nohl<cr>
+nmap <leader>a :Ack
 set showmatch
 set incsearch                     " Highlight matches as you type.
 set hlsearch                      " Highlight matches.
@@ -103,24 +103,27 @@ highlight NonText guifg=#4a4a59
 set splitbelow
 set splitright
 
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-h> <C-w>h
-nnoremap <C-l> <C-w>l
+nmap <C-j> <C-w>j
+nmap <C-k> <C-w>k
+nmap <C-h> <C-w>h
+nmap <C-l> <C-w>l
 
-noremap <Leader>s :split<CR>            " New horizontal split on current file
-noremap <Leader>v :vsplit<CR>           " New vertical split on current file
-noremap <Leader>k :only<CR>                 " Make current split the only one
+nmap <Leader>s :split<CR>            " New horizontal split on current file
+nmap <Leader>v :vsplit<CR>           " New vertical split on current file
+nmap <Leader>k :only<CR>                 " Make current split the only one
 
 " Buffers
-noremap <Leader><Leader> <C-^>          " Switch to previous buffer
-
+nmap <Leader><Leader> <C-^>          " Switch to previous buffer
 
 "Color scheme
 syntax enable
 set background=dark
 colorscheme solarized
 set colorcolumn=120
+
+nmap ; :
+imap <leader>u <esc>viwUea
+nmap <leader>u :call Preserve("normal viwU")<cr>
 
 " Default settings
 set nocompatible
@@ -171,10 +174,10 @@ function! Preserve(command)
 endfunction
 
 " Bind _$ to remove whitespace
-nnoremap _$ :call Preserve("%s/\\s\\+$//e")<CR>
+nmap _$ :call Preserve("%s/\\s\\+$//e")<CR>
 
 " Bind _= to re-indent the buffer
-nnoremap _= :call Preserve("normal gg=G")<CR>
+nmap _= :call Preserve("normal gg=G")<CR>
 
 
 " Only do this part when compiled with support for autocommands
@@ -201,9 +204,11 @@ if has("autocmd")
     autocmd FileType java :DashKeywords="javaee6 java6"
     autocmd FileType javascript :DashKeywords="javascript underscrore backbone jquery"
 
-    au BufRead,BufNewFile *.md set filetype=markdown
-    au BufRead,BufNewFile *.md setlocal spell
-    au BufRead,BufNewFile *.md setlocal textwidth=80
+    autocmd BufRead,BufNewFile *.md set filetype=markdown
+    autocmd BufRead,BufNewFile *.md setlocal spell
+    autocmd BufRead,BufNewFile *.md setlocal textwidth=80
+
+    autocmd FocusLost * :wa
 endif
 
 
