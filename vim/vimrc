@@ -52,14 +52,17 @@ nmap <leader>r <C-t>
 " Dash
 :nmap <silent> <leader>d <Plug>DashSearch
 
+" Gundo
+nnoremap <F5> :GundoToggle<cr>
+
 " Map tab to indent in visual mode
 vmap <tab> >gv
 vmap <s-tab> <gv
 vmap > >gv
 vmap < <gv
 
-imap <tab> <c-r>=InsertTabWrapper()<cr>
-imap <s-tab> <c-p>
+" imap <tab> <c-r>=InsertTabWrapper()<cr>
+" imap <s-tab> <c-p>
 
 " Cut-n-Paste
 nmap <Leader>p "0p
@@ -83,6 +86,7 @@ nmap <Leader>te :e ~/.tmux.conf<CR>
 nmap / /\v
 vmap / /\v
 nmap <Leader>h :nohl<cr>
+nmap <space> :nohl<cr>
 nmap <leader>a :Ack
 set showmatch
 set incsearch                     " Highlight matches as you type.
@@ -227,4 +231,20 @@ function! InsertTabWrapper()
         return "\<c-n>"
 endfunction
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" RENAME CURRENT FILE (thanks Gary Bernhardt)
+" """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! RenameFile()
+    let old_name = expand('%')
+    let new_name = input('New file name: ', expand('%'), 'file')
+    if new_name != '' && new_name != old_name
+        exec ':saveas ' . new_name
+        exec ':silent !rm ' . old_name
+        redraw!
+    endif
+endfunction
+map <Leader>n :call RenameFile()<cr>
+
+
+:set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%)
 
