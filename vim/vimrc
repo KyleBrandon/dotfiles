@@ -129,6 +129,11 @@ nmap ; :
 imap <leader>u <esc>viwUea
 nmap <leader>u :call Preserve("normal viwU")<cr>
 
+" Remapp beginning and end of line.
+nnoremap H 0
+nnoremap HH ^
+nnoremap L $
+
 
 " Default settings
 set spelllang=en_us
@@ -214,7 +219,7 @@ if has("autocmd")
     autocmd BufRead,BufNewFile *.md setlocal spell
     autocmd BufRead,BufNewFile *.md setlocal textwidth=80
 
-    autocmd FocusLost * :wa
+    " autocmd FocusLost * :wa
 endif
 
 
