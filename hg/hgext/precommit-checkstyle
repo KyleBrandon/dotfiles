@@ -1,0 +1,15 @@
+#!/bin/zsh
+
+enforce=$CHECKSTYLE_ENFORCE
+
+if [ "x$enforce" = "x" ]; then
+    enforce=true
+fi;
+
+if [ $enforce = "true" ]; then
+    mvn checkstyle:checkstyle -Preports -Dplatform.classifier=overture -Dcheckstyle.enforce=$enforce
+    exit $?
+else
+    echo "enforce set to false, not enforcing checkstyle rules."
+    exit 0
+fi;

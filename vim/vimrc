@@ -129,7 +129,9 @@ nmap ; :
 imap <leader>u <esc>viwUea
 nmap <leader>u :call Preserve("normal viwU")<cr>
 
+
 " Default settings
+set spelllang=en_us
 set nocompatible
 set backspace=indent,eol,start      " Intuitive backspacing.
 set history=1000
