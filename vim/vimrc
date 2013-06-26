@@ -69,7 +69,7 @@ nmap <Leader>p "0p
 nmap <Leader>P "0P
 nmap <Leader>y "0y
 nmap <Leader>Y "0Y
-nmap <leader>v V`]
+" nmap <leader>v V`]
 
 
 " Edit another file in the same directory as the current file
@@ -82,12 +82,17 @@ nmap <Leader>ev :vsp %%
 nmap <Leader>ve :e ~/.vimrc<CR>
 nmap <Leader>te :e ~/.tmux.conf<CR>
 
+nmap <leader>ae :e ~/.ackrc<cr>
+
 " Fix search
 nmap / /\v
 vmap / /\v
 nmap <Leader>h :nohl<cr>
 nmap <space> :nohl<cr>
 nmap <leader>a :Ack
+nnoremap & :&&<cr>
+xnoremap & :&&<cr>
+
 set showmatch
 set incsearch                     " Highlight matches as you type.
 set hlsearch                      " Highlight matches.
@@ -191,8 +196,9 @@ nmap _$ :call Preserve("%s/\\s\\+$//e")<CR>
 nmap _= :call Preserve("normal gg=G")<CR>
 
 
-" Only do this part when compiled with support for autocommands
-if has("autocmd")
+augroup MyAutoCommands
+    autocmd!
+
     " Enable file type detection
     filetype on
 
@@ -201,7 +207,7 @@ if has("autocmd")
 
     " Customisations based on house-style (arbitrary)
     autocmd FileType xml setlocal ts=4 sts=4 sw=4 expandtab
-    autocmd FileType html setlocal ts=2 sts=2 sw=2 expandtab
+    autocmd FileType html setlocal ts=2 sts=2 sw=2 expandtab spell
     autocmd FileType css setlocal ts=2 sts=2 sw=2 expandtab
     autocmd FileType javascript setlocal ts=2 sts=2 sw=2 expandtab
     autocmd FileType java setlocal ts=4 sts=4 sw=4 expandtab
@@ -219,9 +225,10 @@ if has("autocmd")
     autocmd BufRead,BufNewFile *.md setlocal spell
     autocmd BufRead,BufNewFile *.md setlocal textwidth=80
 
-    " autocmd FocusLost * :wa
-endif
+    autocmd BufNewFile,BufRead *.vm set filetype=html
 
+    " autocmd FocusLost * :wa
+augroup END
 
 function! s:VSetSearch()
     let temp = @s
