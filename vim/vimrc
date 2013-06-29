@@ -15,10 +15,7 @@ noremap \ ,
 let mapleader=","
 
 " Just say no
-map <Left> <Nop>
-map <Right> <Nop>
-map <Up> <Nop>
-map <Down> <Nop>
+nnoremap <leader>x <esc>:call ToggleHardMode()<cr>
 
 " Internal macros
 runtime macros/matchit.vim        " Load the matchit plugin.
@@ -130,7 +127,6 @@ set background=dark
 colorscheme solarized
 set colorcolumn=120
 
-nmap ; :
 imap <leader>u <esc>viwUea
 nmap <leader>u :call Preserve("normal viwU")<cr>
 

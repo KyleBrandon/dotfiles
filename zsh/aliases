@@ -15,7 +15,8 @@ h10 () {
 
 #Development
 alias code="cd ~/documents/code"
-alias sshforte="ssh kyle.brandon@172.16.3.98"
+alias sf="ssh kyle.brandon@172.16.3.98"
+alias keychain="security unlock-keychain"
 
 #java ee
 alias sg="asadmin start-domain"

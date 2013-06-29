@@ -40,3 +40,6 @@
 [submodule "vim/bundle/vim-mercenary"]
 	path = vim/bundle/vim-mercenary
 	url = https://github.com/KyleBrandon/vim-mercenary.git
+[submodule "vim/bundle/hardmode"]
+	path = vim/bundle/hardmode
+	url = https://github.com/wikitopian/hardmode.git
