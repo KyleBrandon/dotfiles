@@ -12,7 +12,7 @@ HISTFILE=~/.zsh_history
 SAVEHIST=20000
 
 # Maven
-export MAVEN_OPTS="-Xmx512m"
+export MAVEN_OPTS="-Xmx512m -Djava.awt.headless=true"
 
 # Node
 export NODE_PATH="/usr/local/lib/node_modules"
