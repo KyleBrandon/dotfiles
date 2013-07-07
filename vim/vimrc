@@ -38,8 +38,6 @@ nmap <leader>m :CommandTBuffer<CR>
 let g:CommandTCancelMap = ['<ESC>', '<C-c>']
 let g:CommandTMaxHeight=50
 let g:CommandTMatchWindowAtTop=0
-" Fuzzy finder: ignore stuff that can't be opened, and generated files
-let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**;target/**"
 
 " CTags remaps
 nmap <leader>c :!ctags -R --exclude='.hg'<CR>
@@ -153,7 +151,7 @@ set showmode                      " Display the mode you're in.
 set hidden                        " Handle multiple buffers better.
 set wildmenu                      " Enhanced command line completion.
 set wildmode=list:longest         " Complete files like a shell.
-set wildignore+=*.class,.git,.hg,*/target/*
+set wildignore+=*.class,.git,.hg,*/target/*,*/node_modules/*
 set number                        " Show line numbers.
 set title                         " Set the terminal's title
 set visualbell                    " No beeping.
@@ -212,7 +210,7 @@ augroup MyAutoCommands
     autocmd BufNewFile,BufRead *.rss setfiletype xml
     "
     " Remove trailing space automatically on java and javascript files on save
-    autocmd BufWritePre *.java,*.js,*.xml,*.properties :call Preserve("%s/\\s\\+$//e")
+    autocmd BufWritePre *.java,*.js,*.xml,*.html,*.properties :call Preserve("%s/\\s\\+$//e")
 
     autocmd FileType java :DashKeywords="javaee6 java6"
     autocmd FileType javascript :DashKeywords="javascript underscrore backbone jquery"
