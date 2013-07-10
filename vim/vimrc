@@ -79,6 +79,11 @@ nmap <Leader>te :e ~/.tmux.conf<CR>
 
 nmap <leader>ae :e ~/.ackrc<cr>
 
+" Open js test results
+nmap <leader>t :e forte-js/target/js-test-result.xml<cr>
+
+nmap <leader>j :e ~/scratch/scratch.txt<cr>
+
 " Fix search
 nmap / /\v
 vmap / /\v

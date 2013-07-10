@@ -1,0 +1,25 @@
+{
+  "indent": 2,
+  "camelcase": true,
+  "latedef": true,
+  "newcap": true,
+  "noarg": true,
+  "noempty": true,
+  "quotmark": false,
+  "undef": true,
+  "unused": "vars",
+  "strict": true,
+  "trailing": true,
+  "white": true,
+  "maxlen": 120,
+  "multistr": true,
+
+  "globals": {
+    "require": false,
+     "define": false,
+     "$": false,
+     "window": false,
+     "document": false,
+     "console": false
+  }
+}

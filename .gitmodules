@@ -43,3 +43,6 @@
 [submodule "vim/bundle/hardmode"]
 	path = vim/bundle/hardmode
 	url = https://github.com/wikitopian/hardmode.git
+[submodule "vim/bundle/vim-unimpaired"]
+	path = vim/bundle/vim-unimpaired
+	url = git://github.com/tpope/vim-unimpaired.git
