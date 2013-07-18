@@ -3,6 +3,8 @@ filetype off
 call pathogen#incubate()
 call pathogen#helptags()
 
+let java_highlight_all=1
+
 " call pathogen#helptags()
 filetype plugin indent on
 syntax on
