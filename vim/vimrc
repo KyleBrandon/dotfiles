@@ -45,10 +45,13 @@ nmap <leader>f <C-]>
 nmap <leader>r <C-t>
 
 " Dash
-:nmap <silent> <leader>d <Plug>DashSearch
+nmap <silent> <leader>d <Plug>DashSearch
 
 " Gundo
 nnoremap <F5> :GundoToggle<cr>
+
+
+
 
 " Map tab to indent in visual mode
 vmap <tab> >gv
@@ -82,6 +85,8 @@ nmap <leader>ae :e ~/.ackrc<cr>
 " Fix search
 nmap / /\v
 vmap / /\v
+nmap ? ?\v
+vmap ? ?\v
 nmap <Leader>h :nohl<cr>
 nmap <space> :nohl<cr>
 nmap <leader>a :Ack
@@ -183,6 +188,12 @@ function! Preserve(command)
     call cursor(l, c)
 endfunction
 
+function! PreserveSearch(command)
+    let _s=@/
+    execute a:command
+    let @/=_s
+endfunction
+
 " Bind _$ to remove whitespace
 nmap _$ :call Preserve("%s/\\s\\+$//e")<CR>
 
@@ -192,19 +203,9 @@ nmap _= :call Preserve("normal gg=G")<CR>
 
 augroup MyAutoCommands
     autocmd!
-
-    " Enable file type detection
     filetype on
 
-    " Syntax of these languages is fussy over tabs Vs spaces
     autocmd FileType make setlocal ts=8 sts=8 sw=8 noexpandtab
-
-    " Customisations based on house-style (arbitrary)
-    autocmd FileType xml setlocal ts=4 sts=4 sw=4 expandtab
-    autocmd FileType html setlocal ts=2 sts=2 sw=2 expandtab spell
-    autocmd FileType css setlocal ts=2 sts=2 sw=2 expandtab
-    autocmd FileType javascript setlocal ts=2 sts=2 sw=2 expandtab
-    autocmd FileType java setlocal ts=4 sts=4 sw=4 expandtab
 
     " Treat .rss files as XML
     autocmd BufNewFile,BufRead *.rss setfiletype xml
@@ -212,16 +213,39 @@ augroup MyAutoCommands
     " Remove trailing space automatically on java and javascript files on save
     autocmd BufWritePre *.java,*.js,*.xml,*.html,*.properties :call Preserve("%s/\\s\\+$//e")
 
-    autocmd FileType java :DashKeywords="javaee6 java6"
-    autocmd FileType javascript :DashKeywords="javascript underscrore backbone jquery"
-
     autocmd BufRead,BufNewFile *.md set filetype=markdown
     autocmd BufRead,BufNewFile *.md setlocal spell
     autocmd BufRead,BufNewFile *.md setlocal textwidth=80
 
-    autocmd BufNewFile,BufRead *.vm set filetype=html
 
     " autocmd FocusLost * :wa
+augroup END
+
+" Javascript
+augroup Javascript
+    autocmd!
+    filetype on
+
+    autocmd FileType xml setlocal ts=4 sts=4 sw=4 expandtab
+    autocmd FileType html setlocal ts=2 sts=2 sw=2 expandtab spell
+    autocmd FileType css setlocal ts=2 sts=2 sw=2 expandtab
+    autocmd FileType javascript setlocal ts=2 sts=2 sw=2 expandtab
+
+    autocmd FileType javascript :DashKeywords="javascript underscrore backbone jquery"
+
+augroup END
+
+" Java groups
+augroup Java
+   autocmd!
+   filetype on
+
+    autocmd FileType java noremap <silent> [[ :call PreserveSearch("silent normal! gg/{\r:nohl\r")<cr>
+    autocmd FileType java setlocal ts=4 sts=4 sw=4 expandtab
+    autocmd FileType java :DashKeywords="javaee6 java6"
+
+    autocmd BufNewFile,BufRead *.vm set filetype=html
+
 augroup END
 
 function! s:VSetSearch()
