@@ -8,6 +8,7 @@ filetype plugin indent on
 syntax on
 
 " Forte
+let g:syntastic_java_checkers=['javac', 'checkstyle']
 let g:syntastic_java_javac_maven_args="-Dplatform.classifier=overture -Poverture"
 
 " Leader maps
@@ -42,7 +43,7 @@ let g:CommandTMatchWindowAtTop=0
 " CTags remaps
 nmap <leader>c :!ctags -R --exclude='.hg'<CR>
 nmap <leader>f <C-]>
-nmap <leader>r <C-t>
+nmap <leader>r <C-o>
 
 " Dash
 :nmap <silent> <leader>d <Plug>DashSearch
@@ -89,7 +90,7 @@ nmap / /\v
 vmap / /\v
 nmap <Leader>h :nohl<cr>
 nmap <space> :nohl<cr>
-nmap <leader>a :Ack
+nmap <leader>a :Ack --
 nnoremap & :&&<cr>
 xnoremap & :&&<cr>
 
@@ -122,7 +123,7 @@ nmap <Leader>v :vsplit<CR>           " New vertical split on current file
 nmap <Leader>k :only<CR>                 " Make current split the only one
 
 " Buffers
-nmap <Leader><Leader> <C-^>          " Switch to previous buffer
+nmap <Leader><Leader> <C-^>          " Follow jump list back
 
 "Color scheme
 syntax enable
@@ -213,6 +214,10 @@ augroup MyAutoCommands
 
     " Treat .rss files as XML
     autocmd BufNewFile,BufRead *.rss setfiletype xml
+
+    " Treat jshintrc as js
+    autocmd BufRead,BufNewFile *.jshintrc setfiletype javascript
+
     "
     " Remove trailing space automatically on java and javascript files on save
     autocmd BufWritePre *.java,*.js,*.xml,*.html,*.properties :call Preserve("%s/\\s\\+$//e")
@@ -260,4 +265,5 @@ map <Leader>n :call RenameFile()<cr>
 
 
 :set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%)
+
 

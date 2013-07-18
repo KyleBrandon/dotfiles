@@ -13,6 +13,8 @@
   "white": true,
   "maxlen": 120,
   "multistr": true,
+  "expr": true,
+  "eqnull": true,
 
   "globals": {
     "require": false,
