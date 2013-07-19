@@ -11,7 +11,9 @@ syntax on
 
 " Forte
 let g:syntastic_java_checkers=['javac', 'checkstyle']
-let g:syntastic_java_javac_maven_args="-Dplatform.classifier=overture -Poverture"
+let g:syntastic_java_checkstyle_classpath = '~/bin/checkstyle-5.5-all.jar'
+let g:syntastic_java_checkstyle_conf_file = '~/bin/checker.xml'
+let g:syntastic_java_javac_maven_args = "-Dplatform.classifier=overture -Poverture"
 
 " Leader maps
 noremap \ ,
@@ -62,7 +64,7 @@ vmap <s-tab> <gv
 vmap > >gv
 vmap < <gv
 
-" imap <tab> <c-r>=InsertTabWrapper()<cr>
+" imap <tab> <c-r>=<SID>InsertTabWrapper()<cr>
 " imap <s-tab> <c-p>
 
 " Cut-n-Paste
@@ -139,7 +141,7 @@ colorscheme solarized
 set colorcolumn=120
 
 imap <leader>u <esc>viwUea
-nmap <leader>u :call Preserve("normal viwU")<cr>
+nmap <leader>u :call <SID>Preserve("normal viwU")<cr>
 
 " Remapp beginning and end of line.
 nnoremap H 0
@@ -184,7 +186,7 @@ set timeout timeoutlen=500 ttimeoutlen=1
 
 
 " Run a command saving the last search and curosr position.
-function! Preserve(command)
+function! s:Preserve(command)
     " Preparation: save last search, and cursor position.
     let _s=@/
     let l = line(".")
@@ -196,17 +198,17 @@ function! Preserve(command)
     call cursor(l, c)
 endfunction
 
-function! PreserveSearch(command)
+function! s:PreserveSearch(command)
     let _s=@/
     execute a:command
     let @/=_s
 endfunction
 
 " Bind _$ to remove whitespace
-nmap _$ :call Preserve("%s/\\s\\+$//e")<CR>
+nmap _$ :call <SID>Preserve("%s/\\s\\+$//e")<CR>
 
 " Bind _= to re-indent the buffer
-nmap _= :call Preserve("normal gg=G")<CR>
+nmap _= :call <SID>Preserve("normal gg=G")<CR>
 
 
 augroup MyAutoCommands
@@ -218,12 +220,9 @@ augroup MyAutoCommands
     " Treat .rss files as XML
     autocmd BufNewFile,BufRead *.rss setfiletype xml
 
-    " Treat jshintrc as js
-    autocmd BufRead,BufNewFile *.jshintrc setfiletype javascript
-
     "
     " Remove trailing space automatically on java and javascript files on save
-    autocmd BufWritePre *.java,*.js,*.xml,*.html,*.properties :call Preserve("%s/\\s\\+$//e")
+    autocmd BufWritePre *.java,*.js,*.xml,*.html,*.properties :call <SID>Preserve("%s/\\s\\+$//e")
 
     autocmd BufRead,BufNewFile *.md set filetype=markdown
     autocmd BufRead,BufNewFile *.md setlocal spell
@@ -237,6 +236,9 @@ augroup END
 augroup Javascript
     autocmd!
     filetype on
+    "
+    " Treat jshintrc as js
+    autocmd BufRead,BufNewFile *.jshintrc setfiletype javascript
 
     autocmd FileType xml setlocal ts=4 sts=4 sw=4 expandtab
     autocmd FileType html setlocal ts=2 sts=2 sw=2 expandtab spell
@@ -252,8 +254,13 @@ augroup Java
    autocmd!
    filetype on
 
-    autocmd FileType java noremap <silent> [[ :call PreserveSearch("silent normal! gg/{\r:nohl\r")<cr>
-    autocmd FileType java setlocal ts=4 sts=4 sw=4 expandtab
+    " autocmd FileType java noremap <silent> [[ :call <SID>PreserveSearch("silent normal! gg/{\r:nohl\r")<cr>
+    autocmd FileType java noremap [[ [m
+    autocmd FileType java noremap ]] ]m
+    autocmd FileType java noremap [] [M
+    autocmd FileType java noremap ][ ]M
+    
+    autocmd FileType java setlocal ts=4 sts=4 sw=4 expandtab foldmethod=indent
     autocmd FileType java :DashKeywords="javaee6 java6"
 
     autocmd BufNewFile,BufRead *.vm set filetype=html
@@ -267,7 +274,7 @@ function! s:VSetSearch()
     let @s = temp
 endfunction
 
-function! InsertTabWrapper()
+function! s:InsertTabWrapper()
     let col = col(".") - 1
     if !col || getline(".")[col - 1] !~ '\k'
         return "\<tab>"
@@ -278,7 +285,7 @@ endfunction
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " RENAME CURRENT FILE (thanks Gary Bernhardt)
 " """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-function! RenameFile()
+function! s:RenameFile()
     let old_name = expand('%')
     let new_name = input('New file name: ', expand('%'), 'file')
     if new_name != '' && new_name != old_name
@@ -287,7 +294,7 @@ function! RenameFile()
         redraw!
     endif
 endfunction
-map <Leader>n :call RenameFile()<cr>
+map <Leader>n :call <SID>RenameFile()<cr>
 
 
 :set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%)
