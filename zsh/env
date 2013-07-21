@@ -19,7 +19,7 @@ export NODE_PATH="/usr/local/lib/node_modules"
 
 # Forte
 export OVERTURE_MAVEN_OPTIONS=-Dplatform.classifier=overture
-export OVERTURE_VERSION=1-1-0 
+export OVERTURE_VERSION=2-0-0 
 
 export FORGE_HOME=~/bin/forge
 
