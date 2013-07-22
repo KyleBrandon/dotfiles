@@ -232,6 +232,15 @@ augroup MyAutoCommands
     " autocmd FocusLost * :wa
 augroup END
 
+" Vim
+augroup Vim
+    autocmd!
+    filetype on
+
+    autocmd FileType vim setlocal ts=4 sts=4 sw=4 expandtab foldmethod=marker
+
+augroup END
+
 " Javascript
 augroup Javascript
     autocmd!
