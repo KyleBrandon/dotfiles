@@ -55,9 +55,6 @@ nmap <silent> <leader>d <Plug>DashSearch
 " Gundo
 nnoremap <F5> :GundoToggle<cr>
 
-
-
-
 " Map tab to indent in visual mode
 vmap <tab> >gv
 vmap <s-tab> <gv
@@ -84,12 +81,10 @@ nmap <Leader>ev :vsp %%
 
 nmap <Leader>ve :e ~/.vimrc<CR>
 nmap <Leader>te :e ~/.tmux.conf<CR>
-
 nmap <leader>ae :e ~/.ackrc<cr>
 
 " Open js test results
 nmap <leader>t :e forte-js/target/js-test-result.xml<cr>
-
 nmap <leader>j :e ~/scratch/scratch.txt<cr>
 
 " Fix search
@@ -210,7 +205,6 @@ nmap _$ :call <SID>Preserve("%s/\\s\\+$//e")<CR>
 " Bind _= to re-indent the buffer
 nmap _= :call <SID>Preserve("normal gg=G")<CR>
 
-
 augroup MyAutoCommands
     autocmd!
     filetype on
@@ -220,16 +214,25 @@ augroup MyAutoCommands
     " Treat .rss files as XML
     autocmd BufNewFile,BufRead *.rss setfiletype xml
 
-    "
     " Remove trailing space automatically on java and javascript files on save
     autocmd BufWritePre *.java,*.js,*.xml,*.html,*.properties :call <SID>Preserve("%s/\\s\\+$//e")
+
+
+
+    " autocmd FocusLost * :wa
+augroup END
+
+" Markdown
+augroup Markdown
+    autocmd!
+    filetype on
 
     autocmd BufRead,BufNewFile *.md set filetype=markdown
     autocmd BufRead,BufNewFile *.md setlocal spell
     autocmd BufRead,BufNewFile *.md setlocal textwidth=80
 
+    nnoremap <leader>q :call <SID>RunMarked()<cr>
 
-    " autocmd FocusLost * :wa
 augroup END
 
 " Vim
@@ -238,7 +241,7 @@ augroup Vim
     filetype on
 
     autocmd FileType vim setlocal ts=4 sts=4 sw=4 expandtab foldmethod=marker
-
+    autocmd FileType vim :DashKeywords="vim"
 augroup END
 
 " Javascript
@@ -296,6 +299,11 @@ function! s:InsertTabWrapper()
         return "\<tab>"
     else
         return "\<c-n>"
+endfunction
+
+function! s:RunMarked()
+    execute "silent !open -a marked ".bufname("%")
+    redraw!
 endfunction
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
