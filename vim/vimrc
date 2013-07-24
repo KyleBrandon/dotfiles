@@ -270,10 +270,17 @@ augroup Java
     autocmd FileType java noremap ][ ]M
     
     autocmd FileType java setlocal ts=4 sts=4 sw=4 expandtab foldmethod=indent
-    autocmd FileType java :DashKeywords="javaee6 java6"
+    autocmd FileType java :DashKeywords="javaee6 java7"
 
     autocmd BufNewFile,BufRead *.vm set filetype=html
 
+augroup END
+
+augroup Shell 
+   autocmd!
+   filetype on
+
+   autocmd BufNewFile,BufRead *.hgrc set filetype=gitconfig
 augroup END
 
 function! s:VSetSearch()
