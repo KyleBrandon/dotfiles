@@ -28,18 +28,21 @@ runtime macros/matchit.vim        " Load the matchit plugin.
 " Mercurial Blame
 vmap <Leader>b :<C-U>!hg blame -fu <C-R>=expand("%:p") <CR> \| sed -n <C-R>=line("'<") <CR>,<C-R>=line("'>") <CR>p <CR>
 
-" Tern
-let g:tern_map_keys=1
-let g:tern_show_argument_hints='on_hold'
-nmap <Leader>td :TernDoc<cr>
-nmap <Leader>tt :TernType<cr>
-nmap <Leader>td :TernDef<cr>
-nmap <Leader>tR :TernRename<cr>
+" " Tern
+" let g:tern_map_keys=1
+" let g:tern_show_argument_hints='on_hold'
+" nmap <Leader>td :TernDoc<cr>
+" nmap <Leader>tt :TernType<cr>
+" nmap <Leader>td :TernDef<cr>
+" nmap <Leader>tR :TernRename<cr>
 
 " Command-T remaps
 nmap <leader>o :CommandT<CR>
 nmap <leader>O :CommandTFlush<CR>
 nmap <leader>m :CommandTBuffer<CR>
+nmap <leader>ov :CommandTFlush<cr>\|:CommandT test/js/views<cr>
+nmap <leader>ov :CommandTFlush<cr>\|:CommandT test/js/views<cr>
+
 let g:CommandTCancelMap = ['<ESC>', '<C-c>']
 let g:CommandTMaxHeight=50
 let g:CommandTMatchWindowAtTop=0
@@ -71,21 +74,22 @@ nmap <Leader>y "0y
 nmap <Leader>Y "0Y
 " nmap <leader>v V`]
 
-
+"Quick editing {{{
 " Edit another file in the same directory as the current file
 " uses expression to extract path from current file's path
 cmap %% <C-R>=expand('%:h').'/'<cr>
 nmap <Leader>e :e %%
-nmap <Leader>es :sp %%
-nmap <Leader>ev :vsp %%
 
-nmap <Leader>ve :e ~/.vimrc<CR>
-nmap <Leader>te :e ~/.tmux.conf<CR>
-nmap <leader>ae :e ~/.ackrc<cr>
+nnoremap <leader>ea :vsplit ~/.ackrc<cr>
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <leader>et :vsplit ~/.tmux.conf<cr>
+nnoremap <leader>ez :vsplit ~/bin/dotfiles/zshrc<cr>
+nnoremap <leader>eh :vsplit ~/.hgrc<cr>
+nnoremap <leader>ed :vsplit ~/.vim/custom-dictionary.utf-8.add<cr>
+nnoremap <leader>es :vsplit ~/scratch/scratch.txt<cr>
+nnoremap <leader>t :call <SID>OpenTestFixture()<cr>
 
-" Open js test results
-nmap <leader>t :e forte-js/target/js-test-result.xml<cr>
-nmap <leader>j :e ~/scratch/scratch.txt<cr>
+" }}}
 
 " Fix search
 nmap / /\v
@@ -122,12 +126,12 @@ nmap <C-k> <C-w>k
 nmap <C-h> <C-w>h
 nmap <C-l> <C-w>l
 
-nmap <Leader>s :split<CR>            " New horizontal split on current file
-nmap <Leader>v :vsplit<CR>           " New vertical split on current file
-nmap <Leader>k :only<CR>                 " Make current split the only one
+nmap <Leader>s :split<CR>           " New horizontal split on current file
+nmap <Leader>v :vsplit<CR>          " New vertical split on current file
+nmap <Leader>k :only<CR>            " Make current split the only one
 
 " Buffers
-nmap <Leader><Leader> <C-^>          " Follow jump list back
+nmap <Leader><Leader> <C-^>         " Follow jump list back
 
 "Color scheme
 syntax enable
@@ -143,6 +147,25 @@ nnoremap H 0
 nnoremap HH ^
 nnoremap L $
 
+" Backups {{{
+set backup                        " enable backups
+set noswapfile                    " it's 2013, Vim.
+
+set undodir=~/.tmp/undo//     " undo files
+set backupdir=~/.tmp/backup// " backups
+set directory=~/.tmp/swap//   " swap files
+
+" Make those folders automatically if they don't already exist.
+if !isdirectory(expand(&undodir))
+    call mkdir(expand(&undodir), "p")
+endif
+if !isdirectory(expand(&backupdir))
+    call mkdir(expand(&backupdir), "p")
+endif
+if !isdirectory(expand(&directory))
+    call mkdir(expand(&directory), "p")
+endif
+" }}}
 
 " Default settings
 set spelllang=en_us
@@ -152,9 +175,6 @@ set history=1000
 set ruler                           " Show cursor position.
 set showcmd                         " Display incomplete commands.
 set autoindent                      "
-set nowrap
-set backupdir=~/.tmp
-set directory=~/.tmp                " Don't clutter my dirs up with swp and tmp files
 set autoread
 set laststatus=2
 set showmode                      " Display the mode you're in.
@@ -165,9 +185,8 @@ set wildignore+=*.class,.git,.hg,*/target/*,*/node_modules/*
 set number                        " Show line numbers.
 set title                         " Set the terminal's title
 set visualbell                    " No beeping.
-set nobackup                        " Don't make a backup before overwriting a file.
-set nowritebackup                   " And again.
 set cursorline
+set nowrap
 
 set tabstop=8
 set shiftwidth=4
@@ -323,4 +342,59 @@ map <Leader>n :call <SID>RenameFile()<cr>
 
 :set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%)
 
+" OpenTestFixture()  {{{1
+function! s:OpenTestFixture() 
+    let test_path = <SID>BuildTestPath()
+    let test_name = <SID>BuildTestFileName()
+
+    exec ':vsplit ' . test_path.'/'.test_name
+endfunction
+
+function! s:BuildTestPath()
+    let current_path = expand('%:h')
+    let test_path = substitute(current_path, 'main/', 'test/', '')
+    let alternate_test_path = test_path.'/test'
+
+    if isdirectory(alternate_test_path)
+        return alternate_test_path
+    elseif isdirectory(test_path)
+        return test_path
+    else
+        return current_path
+    endif
+endfunction
+
+function! s:BuildTestFileName()
+    let current_name = expand('%:t')
+    let js_file = match(current_name, '\.js$')
+    if js_file
+        return 'test-'.current_name
+    else
+        return substitute(current_name, '\v\.(.*)', 'Test.\1', '')
+    endif
+endfunction
+
+"}}}
+
+" JavascriptTestRunner() {{{1
+
+function! s:RunTest()
+
+    let current_name = expand('%:t')
+    let js_file = match(current_name, '\.js$')
+    if js_file
+        s:RunTestJavascript()
+    else
+        echom 'No test runner for '.current_name
+    endif
+
+endfunction
+
+function! s:RunTestJavascript()
+
+
+
+endfunction
+
+"}}}
 
