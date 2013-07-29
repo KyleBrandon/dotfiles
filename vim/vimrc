@@ -9,15 +9,19 @@ let java_highlight_all=1
 filetype plugin indent on
 syntax on
 
+" Leader maps
+noremap \ ,
+let mapleader=","
+
 " Forte
 let g:syntastic_java_checkers=['javac', 'checkstyle']
 let g:syntastic_java_checkstyle_classpath = '~/bin/checkstyle-5.5-all.jar'
 let g:syntastic_java_checkstyle_conf_file = '~/bin/checker.xml'
 let g:syntastic_java_javac_maven_args = "-Dplatform.classifier=overture -Poverture"
 
-" Leader maps
-noremap \ ,
-let mapleader=","
+nnoremap <leader>w :e reqs/
+nnoremap <leader>q :call <SID>RunMarked()<cr>
+
 
 " Just say no
 nnoremap <leader>x <esc>:call ToggleHardMode()<cr>
@@ -31,26 +35,26 @@ vmap <Leader>b :<C-U>!hg blame -fu <C-R>=expand("%:p") <CR> \| sed -n <C-R>=line
 " Tern
 let g:tern_map_keys=1
 let g:tern_show_argument_hints='on_hold'
-nmap <Leader>td :TernDoc<cr>
-nmap <Leader>tt :TernType<cr>
-nmap <Leader>td :TernDef<cr>
-nmap <Leader>tR :TernRename<cr>
+nnoremap <Leader>td :TernDoc<cr>
+nnoremap <Leader>tt :TernType<cr>
+nnoremap <Leader>td :TernDef<cr>
+nnoremap <Leader>tR :TernRename<cr>
 
 " Command-T remaps
-nmap <leader>o :CommandT<CR>
-nmap <leader>O :CommandTFlush<CR>
-nmap <leader>m :CommandTBuffer<CR>
+nnoremap <leader>o :CommandT<CR>
+nnoremap <leader>O :CommandTFlush<CR>
+nnoremap <leader>m :CommandTBuffer<CR>
 let g:CommandTCancelMap = ['<ESC>', '<C-c>']
 let g:CommandTMaxHeight=50
 let g:CommandTMatchWindowAtTop=0
 
 " CTags remaps
-nmap <leader>c :!ctags -R --exclude='.hg'<CR>
-nmap <leader>f <C-]>
-nmap <leader>r <C-o>
+nnoremap <leader>c :!ctags -R --exclude='.hg'<CR>
+nnoremap <leader>f <C-]>
+nnoremap <leader>r <C-o>
 
 " Dash
-nmap <silent> <leader>d <Plug>DashSearch
+nnoremap <silent> <leader>d <Plug>DashSearch
 
 " Gundo
 nnoremap <F5> :GundoToggle<cr>
@@ -65,11 +69,11 @@ vmap < <gv
 " imap <s-tab> <c-p>
 
 " Cut-n-Paste
-nmap <Leader>p "0p
-nmap <Leader>P "0P
-nmap <Leader>y "0y
-nmap <Leader>Y "0Y
-" nmap <leader>v V`]
+nnoremap <Leader>p "0p
+nnoremap <Leader>P "0P
+nnoremap <Leader>y "0y
+nnoremap <Leader>Y "0Y
+" nnoremap <leader>v V`]
 
 
 " Edit another file in the same directory as the current file
@@ -79,22 +83,22 @@ nmap <Leader>e :e %%
 nmap <Leader>es :sp %%
 nmap <Leader>ev :vsp %%
 
-nmap <Leader>ve :e ~/.vimrc<CR>
-nmap <Leader>te :e ~/.tmux.conf<CR>
-nmap <leader>ae :e ~/.ackrc<cr>
+nnoremap <Leader>ve :e ~/.vimrc<CR>
+nnoremap <Leader>te :e ~/.tmux.conf<CR>
+nnoremap <leader>ae :e ~/.ackrc<cr>
 
 " Open js test results
-nmap <leader>t :e forte-js/target/js-test-result.xml<cr>
-nmap <leader>j :e ~/scratch/scratch.txt<cr>
+nnoremap <leader>t :e forte-js/target/js-test-result.xml<cr>
+nnoremap <leader>j :e ~/scratch/scratch.txt<cr>
 
 " Fix search
-nmap / /\v
+nnoremap / /\v
 vmap / /\v
-nmap ? ?\v
+nnoremap ? ?\v
 vmap ? ?\v
-nmap <Leader>h :nohl<cr>
-nmap <space> :nohl<cr>
-nmap <leader>a :Ack --
+nnoremap <Leader>h :nohl<cr>
+nnoremap <space> :nohl<cr>
+nnoremap <leader>a :Ack --
 nnoremap & :&&<cr>
 xnoremap & :&&<cr>
 
@@ -117,17 +121,17 @@ highlight NonText guifg=#4a4a59
 set splitbelow
 set splitright
 
-nmap <C-j> <C-w>j
-nmap <C-k> <C-w>k
-nmap <C-h> <C-w>h
-nmap <C-l> <C-w>l
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-h> <C-w>h
+nnoremap <C-l> <C-w>l
 
-nmap <Leader>s :split<CR>            " New horizontal split on current file
-nmap <Leader>v :vsplit<CR>           " New vertical split on current file
-nmap <Leader>k :only<CR>                 " Make current split the only one
+nnoremap <Leader>s :split<CR>            " New horizontal split on current file
+nnoremap <Leader>v :vsplit<CR>           " New vertical split on current file
+nnoremap <Leader>k :only<CR>                 " Make current split the only one
 
 " Buffers
-nmap <Leader><Leader> <C-^>          " Follow jump list back
+nnoremap <Leader><Leader> <C-^>          " Follow jump list back
 
 "Color scheme
 syntax enable
@@ -136,7 +140,7 @@ colorscheme solarized
 set colorcolumn=120
 
 imap <leader>u <esc>viwUea
-nmap <leader>u :call <SID>Preserve("normal viwU")<cr>
+nnoremap <leader>u :call <SID>Preserve("normal viwU")<cr>
 
 " Remapp beginning and end of line.
 nnoremap H 0
@@ -200,10 +204,10 @@ function! s:PreserveSearch(command)
 endfunction
 
 " Bind _$ to remove whitespace
-nmap _$ :call <SID>Preserve("%s/\\s\\+$//e")<CR>
+nnoremap _$ :call <SID>Preserve("%s/\\s\\+$//e")<CR>
 
 " Bind _= to re-indent the buffer
-nmap _= :call <SID>Preserve("normal gg=G")<CR>
+nnoremap _= :call <SID>Preserve("normal gg=G")<CR>
 
 augroup MyAutoCommands
     autocmd!
@@ -227,11 +231,9 @@ augroup Markdown
     autocmd!
     filetype on
 
+    autocmd FileType markdown setlocal ts=4 sts=4 sw=4 expandtab foldmethod=marker spell
+    autocmd FileType markdown setlocal textwidth=120 colorcolumn=120
     autocmd BufRead,BufNewFile *.md set filetype=markdown
-    autocmd BufRead,BufNewFile *.md setlocal spell
-    autocmd BufRead,BufNewFile *.md setlocal textwidth=80
-
-    nnoremap <leader>q :call <SID>RunMarked()<cr>
 
 augroup END
 
@@ -242,6 +244,7 @@ augroup Vim
 
     autocmd FileType vim setlocal ts=4 sts=4 sw=4 expandtab foldmethod=marker
     autocmd FileType vim :DashKeywords="vim"
+    set colorcolumn=120
 augroup END
 
 " Javascript
