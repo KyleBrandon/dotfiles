@@ -49,7 +49,7 @@ nnoremap <leader>f <C-]>
 nnoremap <leader>r <C-o>
 
 " Dash
-nnoremap <silent> <leader>d <Plug>DashSearch
+nmap <silent> <leader>d <Plug>DashSearch
 
 " Gundo
 nnoremap <F5> :GundoToggle<cr>
@@ -272,6 +272,7 @@ augroup Javascript
     autocmd FileType javascript setlocal ts=2 sts=2 sw=2 expandtab
 
     autocmd FileType javascript :DashKeywords="javascript underscrore backbone jquery"
+    autocmd FileType javascript setlocal efm=%f:%l\ %m
 
 augroup END
 
@@ -348,13 +349,28 @@ endfunction
 function! s:BuildTestPath()
     let current_path = expand('%:h')
     let test_path = substitute(current_path, 'main/', 'test/', '')
-    let alternate_test_path = test_path.'/test'
+    let alternate_test_path = test_path
+
+    let file_ext = expand('%:e')
+    if file_ext ==? 'js' && match(test_path, '/fjs$') > -1
+        " if the js test path ends in '/fjs' the remove it. 
+        let alternate_test_path = fnamemodify(test_path, ':h')
+    elseif file_ext ==? 'java'
+        " Some java test paths live in an additional '/test' subfolder
+        let alternate_test_path = test_path.'/test'
+    else
+        " nothing to special case so use the default
+        let alternate_test_path = test_path
+    endif
 
     if isdirectory(alternate_test_path)
+        " We found an alternate_test_path so use it.
         return alternate_test_path
     elseif isdirectory(test_path)
+        " Use a nice clean test path
         return test_path
     else
+        " can't find a test path so use the current code folder
         return current_path
     endif
 endfunction
@@ -362,7 +378,7 @@ endfunction
 function! s:BuildTestFileName()
     let current_name = expand('%:t')
     let js_file = match(current_name, '\.js$')
-    if js_file
+    if js_file > -1
         return 'test-'.current_name
     else
         return substitute(current_name, '\v\.(.*)', 'Test.\1', '')
@@ -372,20 +388,30 @@ endfunction
 "}}}
 
 " JavascriptTestRunner() {{{1
+map <Leader>tt :call <SID>RunTest()<cr>
 
 function! s:RunTest()
 
     let current_name = expand('%:t')
     let js_file = match(current_name, '\.js$')
     if js_file
-        s:RunTestJavascript()
+        echom 'call RunTestJavascript'
+        let result = <SID>RunJavascriptTest()
     else
         echom 'No test runner for '.current_name
     endif
 
 endfunction
 
-function! s:RunTestJavascript()
+function! s:RunJavascriptTest()
+    let temppath = resolve(tempname())
+    let outfile = temppath . '.out'
+    let errfile = temppath . '.err'
+    let runner_command = 'phantomjs test/qunit-runner.js test/runner.html --outputFormat=vim'
+
+    silent! execute '!' . runner_command . ' > ' . outfile . ' 2> ' . errfile
+    execute 'redraw!'
+    execute ':cfile ' . outfile
 
 endfunction
 
