@@ -272,7 +272,6 @@ augroup Javascript
     autocmd FileType javascript setlocal ts=2 sts=2 sw=2 expandtab
 
     autocmd FileType javascript :DashKeywords="javascript underscrore backbone jquery"
-    autocmd FileType javascript setlocal efm=%f:%l\ %m
 
 augroup END
 
@@ -390,6 +389,11 @@ endfunction
 " JavascriptTestRunner() {{{1
 map <Leader>tt :call <SID>RunTest()<cr>
 
+
+if !exists('g:js_test_folder_path')
+  let g:js_test_folder_path = 'forte-js/src/test'
+endif
+
 function! s:RunTest()
 
     let current_name = expand('%:t')
@@ -407,8 +411,12 @@ function! s:RunJavascriptTest()
     let temppath = resolve(tempname())
     let outfile = temppath . '.out'
     let errfile = temppath . '.err'
-    let runner_command = 'phantomjs test/qunit-runner.js test/runner.html --outputFormat=vim'
+    let runner_command = 'phantomjs '
+    let runner_command .= g:js_test_folder_path.'/qunit-runner.js '
+    let runner_command .= g:js_test_folder_path.'/runner.html '
+    let runner_command .= '--outputFormat=vim'
 
+    execute ':setlocal efm=%f:%l\ %m'
     silent! execute '!' . runner_command . ' > ' . outfile . ' 2> ' . errfile
     execute 'redraw!'
     execute ':cfile ' . outfile
