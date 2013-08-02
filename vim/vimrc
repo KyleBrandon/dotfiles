@@ -44,9 +44,14 @@ let g:CommandTMaxHeight=50
 let g:CommandTMatchWindowAtTop=0
 
 " CTags remaps
-nnoremap <leader>c :!ctags -R --exclude='.hg'<CR>
+nnoremap <leader>c <esc>:call <SID>RunCTags()<cr>
 nnoremap <leader>f <C-]>
 nnoremap <leader>r <C-o>
+
+function! s:RunCTags()
+    silent! execute "!ctags -R --exclude='.hg'"
+    redraw!
+endfunction
 
 " Dash
 nmap <silent> <leader>d <Plug>DashSearch
@@ -389,13 +394,16 @@ endfunction
 " JavascriptTestRunner() {{{1
 map <Leader>tt :call <SID>RunTest()<cr>
 
-
 if !exists('g:js_test_runner_js')
-  let g:js_test_runner_js = 'test'
+    let g:js_test_runner_js = ''
 endif
 
 if !exists('g:js_test_runner_html')
-  let g:js_test_runner_html = 'test'
+    let g:js_test_runner_html = ''
+endif
+
+if !exists('g:js_test_path')
+    let g:js_test_path = ''
 endif
 
 function! s:RunTest()
@@ -403,6 +411,7 @@ function! s:RunTest()
     let current_name = expand('%:t')
     let js_file = match(current_name, '\.js$')
     if js_file
+        call s:SetJavascriptTestPaths()
         call s:RunJavascriptTest()
     else
         echom 'No test runner for '.current_name
@@ -410,13 +419,30 @@ function! s:RunTest()
 
 endfunction
 
+function! s:SetJavascriptTestPaths()
+
+    if empty(g:js_test_path)
+        let path = expand('%:f')
+        let pathIndex = match(path, 'test/')
+        let g:js_test_path = strpart(path, 0, pathIndex + strlen('test'))
+    endif
+
+    if empty(g:js_test_runner_js)
+        let g:js_test_runner_js = g:js_test_path.'/qunit-runner.js'
+    endif
+
+    if empty(g:js_test_runner_html)
+        let g:js_test_runner_html = g:js_test_path.'/runner.html'
+    endif
+endfunction
+
 function! s:RunJavascriptTest()
     let temppath = resolve(tempname())
     let outfile = temppath . '.out'
     let errfile = temppath . '.err'
     let runner_command = 'phantomjs '
-    let runner_command .= g:js_test_runner_js.'/qunit-runner.js '
-    let runner_command .= g:js_test_runner_html.'/runner.html '
+    let runner_command .= g:js_test_runner_js.' '
+    let runner_command .= g:js_test_runner_html.' '
     let runner_command .= '--outputFormat=vim'
 
     execute ':setlocal efm=%f:%l\ %m'
