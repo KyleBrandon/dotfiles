@@ -49,7 +49,11 @@ nnoremap <leader>f <C-]>
 nnoremap <leader>r <C-o>
 
 function! s:RunCTags()
-    silent! execute "!ctags -R --exclude='.hg'"
+    let temppath = resolve(tempname())
+    let outfile = temppath . '.out'
+    let errfile = temppath . '.err'
+
+    silent! execute '!ctags -R --exclude=".hg" > '.outfile.' 2> '.errfile
     redraw!
 endfunction
 
