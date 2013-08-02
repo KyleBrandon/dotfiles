@@ -390,8 +390,12 @@ endfunction
 map <Leader>tt :call <SID>RunTest()<cr>
 
 
-if !exists('g:js_test_folder_path')
-  let g:js_test_folder_path = 'forte-js/src/test'
+if !exists('g:js_test_runner_js')
+  let g:js_test_runner_js = 'test'
+endif
+
+if !exists('g:js_test_runner_html')
+  let g:js_test_runner_html = 'test'
 endif
 
 function! s:RunTest()
@@ -399,8 +403,7 @@ function! s:RunTest()
     let current_name = expand('%:t')
     let js_file = match(current_name, '\.js$')
     if js_file
-        echom 'call RunTestJavascript'
-        let result = <SID>RunJavascriptTest()
+        call s:RunJavascriptTest()
     else
         echom 'No test runner for '.current_name
     endif
@@ -412,8 +415,8 @@ function! s:RunJavascriptTest()
     let outfile = temppath . '.out'
     let errfile = temppath . '.err'
     let runner_command = 'phantomjs '
-    let runner_command .= g:js_test_folder_path.'/qunit-runner.js '
-    let runner_command .= g:js_test_folder_path.'/runner.html '
+    let runner_command .= g:js_test_runner_js.'/qunit-runner.js '
+    let runner_command .= g:js_test_runner_html.'/runner.html '
     let runner_command .= '--outputFormat=vim'
 
     execute ':setlocal efm=%f:%l\ %m'
