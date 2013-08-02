@@ -19,9 +19,6 @@
 [submodule "vim/bundle/vim-commentary"]
 	path = vim/bundle/vim-commentary
 	url = https://github.com/tpope/vim-commentary.git
-[submodule "vim/bundle/vim-maven-plugin"]
-	path = vim/bundle/vim-maven-plugin
-	url = https://github.com/KyleBrandon/vim-maven-plugin.git
 [submodule "vim/bundle/vim-multiple-cursors"]
 	path = vim/bundle/vim-multiple-cursors
 	url = https://github.com/terryma/vim-multiple-cursors.git
